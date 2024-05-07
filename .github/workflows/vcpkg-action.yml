@@ -1,0 +1,35 @@
+on: 
+  pull_request: 
+    branches: main
+    paths:
+      - vcpkg/*
+      - .github/workflows/vcpkg-action.yml
+  push:
+    branches: main
+    paths:
+      - vcpkg/*
+      - .github/workflows/vcpkg-action.yml
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test vcpkg action
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022, windows-2019, ubuntu-22.04, ubuntu-20.04, macos-13, macos-12, macos-11]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Activate vcpkg environment
+        uses: ./vcpkg
+        with:
+          config: ./vcpkg/vcpkg-configuration.json
+          cache: -${{ matrix.os }}
+
+      - name: Verify some tools
+        run: |
+          which cpackget
+          which cbuild

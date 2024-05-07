@@ -1,0 +1,48 @@
+name: 'vcpkg environment'
+description: 'Activate vcpkg environment'
+author: 'Jonatan Antoni <jonatan.antoni@arm.com'
+
+inputs:
+  config:
+    description: "Path to vcpkg-configuration.json"
+    required: false
+    default: "./vcpkg-configuration.json"
+  vcpkg-downloads:
+    description: "Downloads folder for vcpkg"
+    default: "${{ github.workspace }}/.vcpkg/downloads"
+    required: false
+  cache:
+    description: "Cache key suffix, set to empty to disable cache."
+    default: "-"
+    required: false
+  
+runs:
+  using: 'composite'
+  steps:
+    - name: Cache vcpkg
+      uses: actions/cache@v4
+      if: ${{ inputs.cache }}
+      with:
+        key: vcpkg-${{ runner.os }}-${{ runner.arch }}-${{ github.run_id }}${{ inputs.cache }}
+        restore-keys: |
+          vcpkg-${{ runner.os }}-${{ runner.arch }}-
+        path: ${{ inputs.vcpkg-downloads }}
+
+    - name: Create/update all vcpkg registries
+      shell: bash
+      run: |
+        vcpkg x-update-registry --all
+        
+    - name: Activate vcpkg environment
+      shell: bash
+      run: |
+        cd $(dirname "${{ inputs.config }}")
+        config=$(basename "${{ inputs.config }}")
+        if [[ "${config}" != "vcpkg-configuration.json" ]]; then
+          cp "${config}" vcpkg-configuration.json
+        fi
+        vcpkg activate --downloads-root="${{ inputs.vcpkg-downloads }}" --json=env.json
+        echo "Preserving vcpkg PATH ..."
+        jq '.paths.PATH[]' env.json | tr -d '\"' | tee -a $GITHUB_PATH
+        echo "Preserving vcpkg ENV ..."
+        jq '.tools | to_entries | map("\(.key)=\(.value)")[]' env.json | tr -d '\"' | tee -a $GITHUB_ENV

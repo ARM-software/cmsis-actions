@@ -1,0 +1,34 @@
+name: 'Arm Tool License'
+description: 'Activate Arm user-based license'
+author: 'Jonatan Antoni <jonatan.antoni@arm.com'
+
+inputs:
+  server:
+    description: A license server to get product license from.
+    required: false
+  product:
+    description: The product to get a license for (defaults to MDK Community).
+    required: false
+    default: "KEMDK-COM0"
+  code:
+    description: License activation code (takes precedence over product).
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        args=(activate)
+        if [[ -n "${{ inputs.code }}" ]]; then
+          args+=(--code "${{ inputs.code }}")
+        elif [[ -n "${{ inputs.product }}" ]]; then
+          args+=(--product "${{ inputs.product }}")          
+        else
+          echo "::error:Either product or code must be given for cmsis-actions/armlm!"
+          exit 1
+        fi
+        if [[ -n "${{ inputs.server }}" ]]; then
+          args+=(--server "${{ inputs.server }}")
+        fi
+        armlm "${args[@]}"
