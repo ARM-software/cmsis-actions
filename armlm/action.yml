@@ -20,15 +20,24 @@ runs:
     - shell: bash
       run: |
         args=(activate)
+        server="${{ inputs.server }}" 
         if [[ -n "${{ inputs.code }}" ]]; then
           args+=(--code "${{ inputs.code }}")
         elif [[ -n "${{ inputs.product }}" ]]; then
-          args+=(--product "${{ inputs.product }}")          
+          args+=(--product "${{ inputs.product }}")
+          if [[ -z "${server}" ]]; then
+            if [[ "${{ inputs.product }}" == "KEMDK-COM0" ]]; then
+              server="https://mdk-preview.keil.arm.com"
+            else
+              echo "::error:Product must be used in combination with server for ARM-software/cmsis-actions/armlm!"
+              exit 1
+            fi
+          fi
         else
-          echo "::error:Either product or code must be given for cmsis-actions/armlm!"
+          echo "::error:Either product or code must be given for ARM-software/cmsis-actions/armlm!"
           exit 1
         fi
-        if [[ -n "${{ inputs.server }}" ]]; then
-          args+=(--server "${{ inputs.server }}")
+        if [[ -n "${server}" ]]; then
+          args+=(--server "${server}")
         fi
         armlm "${args[@]}"

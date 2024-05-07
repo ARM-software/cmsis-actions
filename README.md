@@ -10,7 +10,7 @@ using `armlm` license manager.
 
 ```yaml
 - name: Activate Arm license
-  uses: ARM-software/cmsis-actions/armlm@main
+  uses: ARM-software/cmsis-actions/armlm@v1
   with:
     server: <custom license server>
     product: KEMDK-COM0
@@ -27,10 +27,10 @@ in the [CMSIS-Toolbox installation guide](https://github.com/Open-CMSIS-Pack/cms
 
 ```yaml
 - name: Setup vcpkg environment
-  uses: ARM-software/cmsis-actions/vcpkg@main
+  uses: ARM-software/cmsis-actions/vcpkg@v1
   with:
     config: "./vcpkg-configuration.json"
-    vcpkg-root: "${{ github.workspace }}/.vcpkg"
+    vcpkg-downloads: "${{ github.workspace }}/.vcpkg/downloads"
     cache: "-"
 ```
 
