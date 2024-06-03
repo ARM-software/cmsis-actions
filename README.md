@@ -39,6 +39,15 @@ non-commercial license which can be used for evaluation.
 - [github.com/ARM-software/CMSIS_6](https://github.com/ARM-software/CMSIS_6/blob/main/.github/workflows/corevalidation.yml) actives a commerical product using a license activation code
   that is provided via a [GitHub secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions).
 
+## Action: setup-vcpkg
+
+This action can be used to install vcpkg into the current runner environment.
+
+```yaml
+- name: Install vcpkg
+  uses: ARM-software/cmsis-actions/setup-vcpkg@v1
+```
+
 ## Action: vcpkg
 
 This action installs a development environment with the tools described in the file `vcpkg-configuration.json`.
