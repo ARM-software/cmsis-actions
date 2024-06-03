@@ -20,6 +20,15 @@ using `armlm` license manager.
 By default, the action activates the free
 [Keil MDK v6 Community license](https://learn.arm.com/learning-paths/microcontrollers/vcpkg-tool-installation/licenseactivation/).
 
+## Action: setup-vcpkg
+
+This action can be used to install vcpkg into the current runner environment.
+
+```yaml
+- name: Install vcpkg
+  uses: ARM-software/cmsis-actions/setup-vcpkg@v1
+```
+
 ## Action: vcpkg
 
 This action can be used to activate a development environment based on a `vcpkg-configuration.json` file as described
