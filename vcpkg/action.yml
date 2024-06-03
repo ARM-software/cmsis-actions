@@ -1,6 +1,6 @@
 name: 'vcpkg environment'
 description: 'Activate vcpkg environment'
-author: 'Jonatan Antoni <jonatan.antoni@arm.com'
+author: 'Jonatan Antoni <jonatan.antoni@arm.com>'
 
 inputs:
   config:
