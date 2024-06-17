@@ -1,6 +1,7 @@
 # ARM-software/cmsis-actions
 
-Collection of reusable [GitHub actions](https://github.com/features/actions) to automate your workflows for embedded projects with Arm processors and/or CMSIS components.
+Collection of reusable [GitHub actions](https://github.com/features/actions) to automate your workflows
+for embedded projects with Arm processors and/or CMSIS components.
 
 ## Action: armlm
 
