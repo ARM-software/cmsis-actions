@@ -41,7 +41,7 @@ non-commercial license which can be used for evaluation.
 
 ## Action: vcpkg
 
-This action installs a development environment with the tools described in the file `vcpkg-configuration.json`. 
+This action installs a development environment with the tools described in the file `vcpkg-configuration.json`.
 The tools are downloaded from the [Arm Tools Artifactory](https://artifacts.tools.arm.com).
 Refer to [CMSIS-Toolbox - Installation - vcpkg - Setup using CLI  installation guide](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/installation.md#vcpkg---setup-using-cli)
 for more information.
