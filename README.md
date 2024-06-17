@@ -1,12 +1,13 @@
 # ARM-software/cmsis-actions
 
+<!-- markdownlint-disable MD013 -->
 Collection of reusable [GitHub actions](https://github.com/features/actions) to automate your workflows
 for embedded projects with Arm processors and/or CMSIS components.
 
 ## Action: armlm
 
 This action activates an
-[Arm user based license](https://developer.arm.com/documentation/102516/1-2/Activate-and-deactivate-your-product-license/Activate-your-product-using-a-license-server?lang=en)
+[Arm user based license](https://developer.arm.com/documentation/102516/1-2/Activate-and-deactivate-your-product-license/Activate-your-product-using-a-license-server)
 using the `armlm` license manager.
 
 ```yaml
@@ -25,8 +26,8 @@ inputs     | default value | description
 `product:` | KEMDK-COM0    | Get a license for the specified product from the server (default MDK Community Edition).
 
 The action can be either called with a
-[license activation `code:`](https://developer.arm.com/documentation/102516/1-2/Activate-and-deactivate-your-product-license/Activate-your-product-using-an-activation-code?lang=en)
-or a [license `server:`  with `product:` specification](https://developer.arm.com/documentation/102516/1-2/Activate-and-deactivate-your-product-license/Activate-your-product-using-a-license-server?lang=en).
+[license activation `code:`](https://developer.arm.com/documentation/102516/1-2/Activate-and-deactivate-your-product-license/Activate-your-product-using-an-activation-code)
+or a [license `server:`  with `product:` specification](https://developer.arm.com/documentation/102516/1-2/Activate-and-deactivate-your-product-license/Activate-your-product-using-a-license-server).
 Without any `inputs`, it activates a license for the [Keil MDK - Community Edition](https://www.keil.arm.com/keil-mdk/) which is a free-to-use,
 non-commercial license which can be used for evaluation.
 
