@@ -23,9 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup vcpkg
-        uses: ./setup-vcpkg
-
       - name: Activate vcpkg environment
         uses: ./vcpkg
         with:
