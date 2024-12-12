@@ -1,0 +1,43 @@
+name: 'Setup vcpkg'
+description: 'Install Microsoft`s vcpkg management tool'
+author: 'Jonatan Antoni <jonatan.antoni@arm.com>'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check vcpkg installation
+      id: vcpkg
+      shell: bash
+      run: |
+        if which vcpkg; then
+          echo "install=0" >> $GITHUB_OUTPUT
+        else
+          echo "install=1" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Clone vcpkg
+      if: steps.vcpkg.outputs.install != 0
+      uses: actions/checkout@v4
+      with:
+        repository: microsoft/vcpkg
+        path: .vcpkg
+
+    - name: Bootstrap vcpkg [Windows]
+      if: steps.vcpkg.outputs.install != 0 && runner.os == 'Windows'
+      shell: cmd
+      run: |
+        ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.bat
+        echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
+
+    - name: Bootstrap vcpkg [Linux/Mac]
+      if: steps.vcpkg.outputs.install != 0 && runner.os != 'Windows'
+      shell: bash
+      run: |
+        ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.sh
+        echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
+
+    - name: Check vcpkg installation
+      if: steps.vcpkg.outputs.install != 0
+      shell: bash
+      run: |
+        which vcpkg
