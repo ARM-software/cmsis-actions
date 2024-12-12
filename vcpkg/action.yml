@@ -20,7 +20,7 @@ runs:
   using: 'composite'
   steps:
     - name: Setup vcpkg
-      uses: ./setup-vcpkg
+      uses: ../setup-vcpkg
 
     - name: Cache vcpkg
       uses: actions/cache@v4
