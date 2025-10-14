@@ -13,7 +13,7 @@ inputs:
     required: false
   cache:
     description: "Cache key suffix, set to empty to disable cache."
-    default: "-"
+    default: ""
     required: false
   
 runs:
@@ -23,7 +23,7 @@ runs:
       uses: actions/cache@v4
       if: ${{ inputs.cache }}
       with:
-        key: vcpkg-${{ runner.os }}-${{ runner.arch }}-${{ github.run_id }}${{ inputs.cache }}
+        key: vcpkg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles(inputs.config) }}${{ inputs.cache }}
         restore-keys: |
           vcpkg-${{ runner.os }}-${{ runner.arch }}-
         path: ${{ inputs.vcpkg-downloads }}
@@ -32,7 +32,7 @@ runs:
       shell: bash
       run: |
         vcpkg x-update-registry --all
-        
+
     - name: Activate vcpkg environment
       shell: bash
       run: |
