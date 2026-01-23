@@ -31,10 +31,29 @@ runs:
     - name: Show vcpkg version
       shell: bash
       run: |
-        echo "=== Show vcpkg version ==="
+        echo "=== Show vcpkg version 1==="
         vcpkg --version
         vcpkg version
 
+    - name: Update vcpkg-tool
+      shell: bash
+      run: |
+        set -euxo pipefail
+    
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          cd /c/vcpkg
+          ./bootstrap-vcpkg.bat -disableMetrics
+        else
+          cd "$VCPKG_ROOT"
+          ./bootstrap-vcpkg.sh -disableMetrics
+        fi
+
+    - name: Show vcpkg version
+      shell: bash
+      run: |
+        echo "=== Show vcpkg version 2==="
+        vcpkg --version
+        vcpkg version
     - name: Diagnose node hash mismatch (real run)
       shell: bash
       env:
