@@ -28,12 +28,21 @@ runs:
           vcpkg-${{ runner.os }}-${{ runner.arch }}-
         path: ${{ inputs.vcpkg-downloads }}
 
-    - name: Show where vcpkg is downloading
+    - name: Diagnose vcpkg node download hash mismatch
       shell: bash
+      env:
+        VCPKG_DOWNLOADS: ${{ github.workspace }}/.vcpkg/downloads
       run: |
+        set -euxo pipefail
+        mkdir -p "$VCPKG_DOWNLOADS"
         echo "VCPKG_DOWNLOADS=$VCPKG_DOWNLOADS"
-        ls -la /c/vcpkg/downloads 2>/dev/null || true
-        ls -la "${{ inputs.vcpkg-downloads }}" 2>/dev/null || true
+        rm -f "$VCPKG_DOWNLOADS"/*.part || true
+    
+        # Run with extra logging
+        vcpkg x-update-registry --all --debug --verbose || true
+    
+        echo "=== downloads dir listing ==="
+        ls -la "$VCPKG_DOWNLOADS" || true
 
     - name: Create/update all vcpkg registries
       shell: bash
