@@ -28,6 +28,10 @@ runs:
           vcpkg-${{ runner.os }}-${{ runner.arch }}-
         path: ${{ inputs.vcpkg-downloads }}
 
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24.13.0
+
     - name: Create/update all vcpkg registries
       shell: bash
       run: |
