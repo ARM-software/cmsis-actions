@@ -45,24 +45,33 @@ runs:
         echo "=== show node-ish files ==="
         ls -la "$VCPKG_DOWNLOADS"/node* 2>/dev/null || true
 
-    - name: Inspect downloaded node file (if present)
+    - name: Test the downloaded 7z for corruption
       shell: bash
       env:
         VCPKG_DOWNLOADS: ${{ github.workspace }}/.vcpkg/downloads
       run: |
+        echo "===Test the downloaded 7z for corruption==="
         set -euxo pipefail
-        f="$(ls -1 "$VCPKG_DOWNLOADS"/node-v*-win-x64.7z* 2>/dev/null | head -n 1 || true)"
-        echo "Candidate: $f"
-        test -n "$f" || { echo "No node archive found"; exit 0; }
+        f="$(ls -1 "$VCPKG_DOWNLOADS"/node-v24.13.0-win-x64.7z.*.part | head -n 1)"
+        7z t "$f" || true
+        7z l "$f" | head -n 80 || true
+
+    - name: Manual curl download and compare to vcpkg file
+      shell: bash
+      env:
+        VCPKG_DOWNLOADS: ${{ github.workspace }}/.vcpkg/downloads
+      run: |
+        echo "=====Manual curl download and compare to vcpkg file====="
+        set -euxo pipefail
+        url="https://nodejs.org/dist/v24.13.0/node-v24.13.0-win-x64.7z"
+        curl -L --fail --retry 3 --retry-all-errors -o "$VCPKG_DOWNLOADS/manual-node.7z" "$url"
+        echo "manual size:"; wc -c < "$VCPKG_DOWNLOADS/manual-node.7z"
+        echo "manual sha512:"; sha512sum "$VCPKG_DOWNLOADS/manual-node.7z" || true
     
-        echo "Size bytes:"
-        wc -c < "$f" || true
-    
-        echo "First 200 printable chars:"
-        head -c 200 "$f" | tr -cd '[:print:]\n\r\t' ; echo
-    
-        echo "First 16 bytes hex (signature):"
-        head -c 16 "$f" | xxd -p || true
+        f="$(ls -1 "$VCPKG_DOWNLOADS"/node-v24.13.0-win-x64.7z.*.part | head -n 1)"
+        echo "vcpkg size:"; wc -c < "$f"
+        echo "vcpkg sha512:"; sha512sum "$f" || true
+
 
     - name: Create/update all vcpkg registries
       shell: bash
