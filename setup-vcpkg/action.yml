@@ -24,14 +24,18 @@ runs:
 
     - name: Get required Node.js version
       id: get_node_version
-      if: steps.vcpkg.outputs.install != 0
       shell: bash
       run: |
-        node_version=$(grep -A 5 '"name": "node"' "${{ github.workspace }}/.vcpkg/scripts/vcpkg-tools.json" | grep '"version"' | head -n1 | sed 's/[^0-9.]*\([0-9.]*\).*/\1/')
+        # Try to find vcpkg-tools.json in the cloned location, else use system vcpkg location
+        if [ -f "${{ github.workspace }}/.vcpkg/scripts/vcpkg-tools.json" ]; then
+          tools_json="${{ github.workspace }}/.vcpkg/scripts/vcpkg-tools.json"
+        else
+          tools_json="$(dirname $(which vcpkg))/../scripts/vcpkg-tools.json"
+        fi
+        node_version=$(grep -A 5 '"name": "node"' "$tools_json" | grep '"version"' | head -n1 | sed 's/[^0-9.]*\([0-9.]*\).*/\1/')
         echo "node_version=$node_version" >> $GITHUB_OUTPUT
 
     - uses: actions/setup-node@v6
-      if: steps.vcpkg.outputs.install != 0
       with:
         node-version: ${{ steps.get_node_version.outputs.node_version }}
 
