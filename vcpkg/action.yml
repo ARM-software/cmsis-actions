@@ -32,7 +32,6 @@ runs:
       shell: bash
       run: |
         vcpkg x-update-registry --all
-
     - name: Activate vcpkg environment
       shell: bash
       run: |
