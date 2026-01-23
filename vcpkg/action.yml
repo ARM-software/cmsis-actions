@@ -35,6 +35,15 @@ runs:
         vcpkg --version
         vcpkg version
 
+    - name: Which vcpkg am I running?
+      shell: bash
+      run: |
+        set -euxo pipefail
+        which vcpkg || true
+        type -a vcpkg || true
+        ls -la /c/vcpkg/vcpkg.exe || true
+        /c/vcpkg/vcpkg.exe --version || true
+
     - name: Update vcpkg-tool (Windows)
       if: runner.os == 'Windows'
       shell: bash
