@@ -35,18 +35,13 @@ runs:
         vcpkg --version
         vcpkg version
 
-    - name: Update vcpkg-tool
+    - name: Update vcpkg-tool (Windows)
+      if: runner.os == 'Windows'
       shell: bash
       run: |
         set -euxo pipefail
-    
-        if [[ "$RUNNER_OS" == "Windows" ]]; then
-          cd /c/vcpkg
-          ./bootstrap-vcpkg.bat -disableMetrics
-        else
-          cd "$VCPKG_ROOT"
-          ./bootstrap-vcpkg.sh -disableMetrics
-        fi
+        curl -L -o /c/vcpkg/vcpkg.exe \
+          https://github.com/microsoft/vcpkg-tool/releases/latest/download/vcpkg.exe
 
     - name: Show vcpkg version
       shell: bash
@@ -54,50 +49,6 @@ runs:
         echo "=== Show vcpkg version 2==="
         vcpkg --version
         vcpkg version
-    - name: Diagnose node hash mismatch (real run)
-      shell: bash
-      env:
-        VCPKG_DOWNLOADS: ${{ github.workspace }}/.vcpkg/downloads
-      run: |
-        set -euxo pipefail
-        mkdir -p "$VCPKG_DOWNLOADS"
-        rm -f "$VCPKG_DOWNLOADS"/*.part || true
-    
-        vcpkg x-update-registry --all --debug --debug-env || true
-    
-        echo "=== downloads dir listing ==="
-        ls -la "$VCPKG_DOWNLOADS" || true
-    
-        echo "=== show node-ish files ==="
-        ls -la "$VCPKG_DOWNLOADS"/node* 2>/dev/null || true
-
-    - name: Test the downloaded 7z for corruption
-      shell: bash
-      env:
-        VCPKG_DOWNLOADS: ${{ github.workspace }}/.vcpkg/downloads
-      run: |
-        echo "===Test the downloaded 7z for corruption==="
-        set -euxo pipefail
-        f="$(ls -1 "$VCPKG_DOWNLOADS"/node-v24.13.0-win-x64.7z.*.part | head -n 1)"
-        7z t "$f" || true
-        7z l "$f" | head -n 80 || true
-
-    - name: Manual curl download and compare to vcpkg file
-      shell: bash
-      env:
-        VCPKG_DOWNLOADS: ${{ github.workspace }}/.vcpkg/downloads
-      run: |
-        echo "=====Manual curl download and compare to vcpkg file====="
-        set -euxo pipefail
-        url="https://nodejs.org/dist/v24.13.0/node-v24.13.0-win-x64.7z"
-        curl -L --fail --retry 3 --retry-all-errors -o "$VCPKG_DOWNLOADS/manual-node.7z" "$url"
-        echo "manual size:"; wc -c < "$VCPKG_DOWNLOADS/manual-node.7z"
-        echo "manual sha512:"; sha512sum "$VCPKG_DOWNLOADS/manual-node.7z" || true
-    
-        f="$(ls -1 "$VCPKG_DOWNLOADS"/node-v24.13.0-win-x64.7z.*.part | head -n 1)"
-        echo "vcpkg size:"; wc -c < "$f"
-        echo "vcpkg sha512:"; sha512sum "$f" || true
-
 
     - name: Create/update all vcpkg registries
       shell: bash
