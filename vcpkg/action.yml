@@ -28,6 +28,13 @@ runs:
           vcpkg-${{ runner.os }}-${{ runner.arch }}-
         path: ${{ inputs.vcpkg-downloads }}
 
+    - name: Show where vcpkg is downloading
+      shell: bash
+      run: |
+        echo "VCPKG_DOWNLOADS=$VCPKG_DOWNLOADS"
+        ls -la /c/vcpkg/downloads 2>/dev/null || true
+        ls -la "${{ inputs.vcpkg-downloads }}" 2>/dev/null || true
+
     - name: Create/update all vcpkg registries
       shell: bash
       run: |
