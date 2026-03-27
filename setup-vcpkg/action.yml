@@ -17,10 +17,11 @@ runs:
 
     - name: Clone vcpkg
       if: steps.vcpkg.outputs.install != 0
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: microsoft/vcpkg
         path: .vcpkg
+        ref: master
 
     - name: Bootstrap vcpkg [Windows]
       if: steps.vcpkg.outputs.install != 0 && runner.os == 'Windows'

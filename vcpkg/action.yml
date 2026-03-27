@@ -20,7 +20,7 @@ runs:
   using: 'composite'
   steps:
     - name: Cache vcpkg
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       if: ${{ inputs.cache }}
       with:
         key: vcpkg-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles(inputs.config) }}${{ inputs.cache }}
