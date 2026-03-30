@@ -23,6 +23,19 @@ runs:
         path: .vcpkg
         ref: master
 
+    - name: Get required Node.js version
+      id: get_node_version
+      if: steps.vcpkg.outputs.install != 0
+      shell: bash
+      run: |
+        node_version=$(grep -A 5 '"name": "node"' "${{ github.workspace }}/.vcpkg/scripts/vcpkg-tools.json" | grep '"version"' | head -n1 | sed 's/[^0-9.]*\([0-9.]*\).*/\1/')
+        echo "node_version=$node_version" >> $GITHUB_OUTPUT
+
+    - uses: actions/setup-node@v6
+      if: steps.vcpkg.outputs.install != 0
+      with:
+        node-version: ${{ steps.get_node_version.outputs.node_version }}
+
     - name: Bootstrap vcpkg [Windows]
       if: steps.vcpkg.outputs.install != 0 && runner.os == 'Windows'
       shell: cmd
