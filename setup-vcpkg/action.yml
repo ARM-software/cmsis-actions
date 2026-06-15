@@ -2,43 +2,46 @@ name: 'Setup vcpkg'
 description: 'Install Microsoft`s vcpkg management tool'
 author: 'Jonatan Antoni <jonatan.antoni@arm.com>'
 
+inputs:
+  version:
+    description: The version of vcpkg to install.
+    default: "2026.04.27"
+    required: false
+
 runs:
   using: 'composite'
   steps:
-    - name: Check vcpkg installation
-      id: vcpkg
-      shell: bash
-      run: |
-        if which vcpkg; then
-          echo "install=0" >> $GITHUB_OUTPUT
-        else
-          echo "install=1" >> $GITHUB_OUTPUT
-        fi
-
     - name: Clone vcpkg
-      if: steps.vcpkg.outputs.install != 0
       uses: actions/checkout@v6
       with:
         repository: microsoft/vcpkg
         path: .vcpkg
-        ref: master
+        ref: ${{ inputs.version }}
 
     - name: Bootstrap vcpkg [Windows]
-      if: steps.vcpkg.outputs.install != 0 && runner.os == 'Windows'
+      if: runner.os == 'Windows'
       shell: cmd
       run: |
-        ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.bat
-        echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
+        call ${{ github.workspace }}\.vcpkg\bootstrap-vcpkg.bat
+        echo ${{ github.workspace }}\.vcpkg >> %GITHUB_PATH%
+
+    - name: Check vcpkg installation [Windows]
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        where vcpkg
+        vcpkg version
 
     - name: Bootstrap vcpkg [Linux/Mac]
-      if: steps.vcpkg.outputs.install != 0 && runner.os != 'Windows'
+      if: runner.os != 'Windows'
       shell: bash
       run: |
         ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.sh
-        echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
+        echo ${{ github.workspace }}/.vcpkg >> $GITHUB_PATH
 
-    - name: Check vcpkg installation
-      if: steps.vcpkg.outputs.install != 0
+    - name: Check vcpkg installation [Linux/Mac]
+      if: runner.os != 'Windows'
       shell: bash
       run: |
         which vcpkg
+        vcpkg version

@@ -1,12 +1,14 @@
 on: 
   pull_request: 
-    branches: main
+    branches: [main]
     paths:
+      - setup-vcpkg/*
       - vcpkg/*
       - .github/workflows/vcpkg-action.yml
   push:
-    branches: main
+    branches: [main]
     paths:
+      - setup-vcpkg/*
       - vcpkg/*
       - .github/workflows/vcpkg-action.yml
   workflow_dispatch:
@@ -17,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2022, ubuntu-22.04, ubuntu-24.04, ubuntu-22.04-arm, ubuntu-24.04-arm, macos-14, macos-15-intel]
+        os: [windows-2022, windows-2025, windows-11-arm, ubuntu-22.04, ubuntu-24.04, ubuntu-26.04, ubuntu-22.04-arm, ubuntu-24.04-arm, ubuntu-26.04-arm, macos-14, macos-15-intel, macos-26]
 
     steps:
       - name: Checkout
