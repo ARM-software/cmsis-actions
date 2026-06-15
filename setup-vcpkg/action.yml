@@ -36,3 +36,4 @@ runs:
       shell: bash
       run: |
         which vcpkg
+        vcpkg version
