@@ -22,8 +22,8 @@ runs:
       if: runner.os == 'Windows'
       shell: cmd
       run: |
-        ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.bat
-        echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
+        call ${{ github.workspace }}\.vcpkg\bootstrap-vcpkg.bat
+        echo ${{ github.workspace }}\.vcpkg >> %GITHUB_PATH%
 
     - name: Check vcpkg installation [Windows]
       if: runner.os == 'Windows'
@@ -37,7 +37,7 @@ runs:
       shell: bash
       run: |
         ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.sh
-        echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
+        echo ${{ github.workspace }}/.vcpkg >> $GITHUB_PATH
 
     - name: Check vcpkg installation [Linux/Mac]
       if: runner.os != 'Windows'
