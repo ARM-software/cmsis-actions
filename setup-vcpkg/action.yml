@@ -25,6 +25,13 @@ runs:
         ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.bat
         echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
 
+    - name: Check vcpkg installation [Windows]
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        where vcpkg
+        vcpkg version
+
     - name: Bootstrap vcpkg [Linux/Mac]
       if: runner.os != 'Windows'
       shell: bash
@@ -32,7 +39,8 @@ runs:
         ${{ github.workspace }}/.vcpkg/bootstrap-vcpkg.sh
         echo ${{ github.workspace }}/.vcpkg/ >> $GITHUB_PATH
 
-    - name: Check vcpkg installation
+    - name: Check vcpkg installation [Linux/Mac]
+      if: runner.os != 'Windows'
       shell: bash
       run: |
         which vcpkg
