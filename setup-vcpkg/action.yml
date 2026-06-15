@@ -5,7 +5,7 @@ author: 'Jonatan Antoni <jonatan.antoni@arm.com>'
 inputs:
   version:
     description: The version of vcpkg to install.
-    default: "2026.06.01"
+    default: "2026.04.27"
     required: false
 
 runs:

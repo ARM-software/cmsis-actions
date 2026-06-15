@@ -47,14 +47,14 @@ This action can be used to install vcpkg into the current runner environment.
 - name: Install vcpkg
   uses: ARM-software/cmsis-actions/setup-vcpkg@v1
   with:
-    version: 2026.06.01
+    version: 2026.04.27
 ```
 
 inputs              | default value  | description
 --------------------|----------------|--------------
-`version:`          | 2026.06.01     | The version of vcpkg to install.
+`version:`          | 2026.04.27     | The version of vcpkg to install.
 
-**NOTE:** The required vcpkg-artifacts is dropped by July 1st 2026. Assure the version installed has still support for artifacts.
+**NOTE:** The required vcpkg-artifacts is dropped after July 1st 2026. Assure the version installed has still support for artifacts.
 
 ## Action: vcpkg
 
