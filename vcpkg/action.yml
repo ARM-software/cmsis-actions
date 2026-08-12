@@ -28,6 +28,17 @@ runs:
           vcpkg-${{ runner.os }}-${{ runner.arch }}-
         path: ${{ inputs.vcpkg-downloads }}
 
+    - name: Get required Node.js version
+      id: get_node_version
+      shell: bash
+      run: |
+        node_version=$(curl -sSL https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg-tools.json | grep -A 5 '"name": "node"' | grep '"version"' | head -n1 | sed 's/[^0-9.]*\([0-9.]*\).*/\1/')
+        echo "node_version=$node_version" >> $GITHUB_OUTPUT
+
+    - uses: actions/setup-node@v6
+      with:
+        node-version: ${{ steps.get_node_version.outputs.node_version }}
+
     - name: Create/update all vcpkg registries
       shell: bash
       run: |
