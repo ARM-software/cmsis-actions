@@ -18,6 +18,7 @@ jobs:
     name: Test vcpkg action
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os:
           - windows-2022
