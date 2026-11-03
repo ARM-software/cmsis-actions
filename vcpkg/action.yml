@@ -30,11 +30,17 @@ runs:
 
     - name: Create/update all vcpkg registries
       shell: bash
+      # Use runner-owned temporary storage instead of the shared /tmp/vcpkg.
+      env:
+        TMPDIR: ${{ runner.temp }}
       run: |
         vcpkg x-update-registry --all
 
     - name: Activate vcpkg environment
       shell: bash
+      # Use runner-owned temporary storage instead of the shared /tmp/vcpkg.
+      env:
+        TMPDIR: ${{ runner.temp }}
       run: |
         cd $(dirname "${{ inputs.config }}")
         config=$(basename "${{ inputs.config }}")
